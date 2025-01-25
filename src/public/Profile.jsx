@@ -16,12 +16,16 @@ function Profile() {
     address: "",
     city: "",
     phone: "",
-    gender: "",
   })
 
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    if (!data.guarantor_1_name || !data.guarantor_1_email || !data.guarantor_1_location || !data.guarantor_1_cnic || !data.guarantor_2_name || !data.guarantor_2_email || !data.guarantor_2_location || !data.guarantor_2_cnic || !data.sheetFile || !data.address || !data.city || !data.phone) {
+      alert("Please fill all the fields");
+      return;
+
+    }
     console.log(data.guarantor_1_cnic);
     console.log(data.guarantor_2_email);
     console.log(data.phone);

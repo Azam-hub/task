@@ -4,14 +4,60 @@ import { useParams } from 'react-router';
 function Form() {
   const { type } = useParams();
 
+  const [emi, setEmi] = useState(0);
+
+  const annualInterestRate = 5; // Annual interest rate
   const [initialAmount, setInitialAmount] = useState("");
   const [loanPeriod, setLoanPeriod] = useState("");
+  const [loanAmount, setLoanAmount] = useState("");
+
+  const businessLoan_types = ["buyStall", "advanceRentForShop", "shopAssets", "shopMachinery"];
+  const weddingLoan_types = ["valima", "furniture", "valimaFood", "jahez"];
+  const educationLoan_types = ['universityFees', 'childFeesLoan'];
+  const homeConstructionLoan_types = ['structure', 'finishing'];
   
   const handleCalculatorSubmit = (e)=>{
     e.preventDefault()
-    console.log(type);
-    console.log("Initial Amount: ", initialAmount);
-    console.log("Loan Period: ", loanPeriod);
+
+    if (!initialAmount || !loanPeriod || (educationLoan_types.includes(type) && !loanAmount)) {
+      alert("Please fill all the fields");
+      return;
+    }
+
+    let fianlLoanAmount;
+    if(weddingLoan_types.includes(type)){
+      fianlLoanAmount = 500000;
+    }
+    else if(businessLoan_types.includes(type)){
+      fianlLoanAmount = 1000000;
+    }
+    else if(homeConstructionLoan_types.includes(type)){
+      fianlLoanAmount = 1000000;
+    }
+    else if(educationLoan_types.includes(type)){
+      fianlLoanAmount = loanAmount;
+    }
+    else{
+      alert("Invalid Loan Type");
+      return;
+    }
+
+    const principal = fianlLoanAmount - initialAmount; // Remaining loan amount
+    const interestRate = annualInterestRate / 100 / 12; // Monthly interest rate
+    const totalMonths = loanPeriod * 12; // Total number of months
+
+    // EMI formula
+    const emi =
+      (principal * interestRate * Math.pow(1 + interestRate, totalMonths)) /
+      (Math.pow(1 + interestRate, totalMonths) - 1);
+
+    setEmi(emi.toFixed(2)); // Round to 2 decimal places
+    alert("EMI: " + emi.toFixed(2));
+
+    openModal();
+    // console.log(type);
+    // console.log("Initial Amount: ", initialAmount);
+    // console.log("Loan Period: ", loanPeriod);
   }
 
 
@@ -126,11 +172,18 @@ function Form() {
               <input type="number" value={initialAmount} onChange={(e) => setInitialAmount(e.target.value)} id="initial-amount" placeholder="Enter Initial Amount" className="border-2 border-gray-200 rounded-lg shadow-lg p-2" />
             </div>
             <div className="flex flex-col gap-2 mt-5">
-              <label htmlFor="loan-period">Loan Period</label>
+              <label htmlFor="loan-period">Loan Period (years)</label>
               <input type="number" value={loanPeriod} onChange={(e) => setLoanPeriod(e.target.value)} id="loan-period" placeholder="Enter Loan Period" className="border-2 border-gray-200 rounded-lg shadow-lg p-2" />
             </div>
 
-            <button onClick={openModal} className="rounded-lg bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-5" >Proceed</button>
+            {educationLoan_types.includes(type) && 
+            <div className="flex flex-col gap-2 mt-5">
+              <label htmlFor="loan-amount">Loan Amount</label>
+              <input type="number" value={loanAmount} onChange={(e) => setLoanAmount(e.target.value)} id="loan-amount" placeholder="Enter Loan Amount" className="border-2 border-gray-200 rounded-lg shadow-lg p-2" />
+            </div>
+            }
+
+            <button className="rounded-lg bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-5" >Proceed</button>
 
           </form>
         </div>
