@@ -52,7 +52,7 @@ function Form() {
       (Math.pow(1 + interestRate, totalMonths) - 1);
 
     setEmi(calculatedEmi.toFixed(2)); // Round to 2 decimal places
-    alert("EMI: " + emi.toFixed(2));
+    alert("EMI: " + calculatedEmi.toFixed(2));
 
     openModal();
     // console.log(type);
