@@ -47,11 +47,11 @@ function Form() {
     const totalMonths = loanPeriod * 12; // Total number of months
 
     // EMI formula
-    const emi =
+    const calculatedEmi =
       (principal * interestRate * Math.pow(1 + interestRate, totalMonths)) /
       (Math.pow(1 + interestRate, totalMonths) - 1);
 
-    setEmi(emi.toFixed(2)); // Round to 2 decimal places
+    setEmi(calculatedEmi.toFixed(2)); // Round to 2 decimal places
     alert("EMI: " + emi.toFixed(2));
 
     openModal();
